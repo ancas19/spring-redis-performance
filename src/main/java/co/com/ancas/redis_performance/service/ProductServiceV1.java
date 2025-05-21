@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductServiceV1 {
 
     private final ProductRepository productRepository;
 
