@@ -7,23 +7,25 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class ProductServiceV2 {
-    private final CacheTemplate<Long,ProductEntity> productCacheTemplate;
+    private final CacheTemplate<Long, ProductEntity> productCacheTemplate;
+    private final ProductVisitService productVisitService;
 
-    public ProductServiceV2( CacheTemplate<Long,ProductEntity>  productCacheTemplate) {
+    public ProductServiceV2(CacheTemplate<Long, ProductEntity> productCacheTemplate, ProductVisitService productVisitService) {
         this.productCacheTemplate = productCacheTemplate;
+        this.productVisitService = productVisitService;
     }
 
 
-    public Mono<ProductEntity> getProduct(Long id){
-        return productCacheTemplate.get(id);
+    public Mono<ProductEntity> getProduct(Long id) {
+        return productCacheTemplate.get(id).doFirst(() -> this.productVisitService.addVisit(id));
     }
 
-    public Mono<ProductEntity> updateProduct(Long id, Mono<ProductEntity> productMono){
+    public Mono<ProductEntity> updateProduct(Long id, Mono<ProductEntity> productMono) {
         return productMono
-                .flatMap(data-> productCacheTemplate.update(id, data));
+                .flatMap(data -> productCacheTemplate.update(id, data));
     }
 
-    public Mono<Void> deleteProduct(Long id){
+    public Mono<Void> deleteProduct(Long id) {
         return productCacheTemplate.delete(id);
     }
 }

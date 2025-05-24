@@ -3,8 +3,8 @@ spring:
     name: redis-performance
   r2dbc:
     url: r2dbc:postgresql://localhost:5432/performance
-    username: ancas19
-    password: P0stgr3s#P4ssw0rd
+    username: postgres
+    password: admin123
   data:
     redis:
       host: localhost
